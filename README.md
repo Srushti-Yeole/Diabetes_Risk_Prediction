@@ -42,4 +42,15 @@ A machine learning-based web application that predicts diabetes risk based on va
 
 ## Disclaimer
 
-This tool provides an estimation only and should not replace professional medical advice. Always consult with healthcare professionals for proper diagnosis and treatment.
+This tool provides an estimation only and should not replace professional medical advice. Always consult with healthcare professionals for proper diagnosis and treatment.                            
+# Diabetes Risk Predictor
+
+##  Live Demo
+https://diabetes-risk-prediction-3drm.onrender.com/
+
+## Features
+- Diabetes prediction using ML
+- User input form
+- Real-time results
+- Deployed on Render
+
