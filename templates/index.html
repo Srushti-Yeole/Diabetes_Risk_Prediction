@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diabetes Risk Prediction</title>
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --primary-hover: #0069d9;
+            --text-color: #333;
+            --bg-color: #f8f9fa;
+            --container-padding: 30px;
+            --border-radius: 10px;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            padding: 20px;
+            margin: 0;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: var(--container-padding);
+            width: 100%;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 24px;
+            font-size: clamp(24px, 5vw, 28px);
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        .info-box {
+            background-color: #e9ecef;
+            border-left: 4px solid #6c757d;
+            padding: 15px;
+            margin-bottom: 25px;
+            border-radius: 4px;
+            font-size: clamp(14px, 3vw, 16px);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444;
+            font-size: clamp(14px, 3vw, 16px);
+        }
+
+        .field-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        input[type="range"] {
+            flex: 1;
+            min-width: 150px;
+            height: 6px;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background: #ddd;
+            border-radius: 3px;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background 0.3s;
+            border: none;
+        }
+
+        input[type="number"] {
+            width: 80px;
+            padding: 8px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 14px;
+            -moz-appearance: textfield;
+        }
+
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .description {
+            display: block;
+            font-size: clamp(12px, 2.5vw, 13px);
+            color: #6c757d;
+            margin-top: 5px;
+        }
+
+        .submit-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: clamp(10px, 3vw, 12px) clamp(20px, 5vw, 24px);
+            font-size: clamp(14px, 3vw, 16px);
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .submit-btn:hover,
+        .submit-btn:focus {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+
+        .alert {
+            margin-top: 25px;
+            padding: 15px;
+            border-radius: 5px;
+            font-weight: 500;
+            font-size: clamp(14px, 3vw, 16px);
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: clamp(11px, 2.5vw, 12px);
+            color: #6c757d;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 20px;
+            }
+
+            .field-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            input[type="range"] {
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+
+            input[type="number"] {
+                width: 100%;
+                max-width: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+
+            .form-group {
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Diabetes Risk Prediction</h1>
+        
+        <div class="info-box">
+            Enter your health metrics below for diabetes risk assessment. This tool uses a machine learning model to evaluate your risk.
+        </div>
+        
+        <form action="/predict" method="POST">
+            <!-- Pregnancies -->
+            <div class="form-group">
+                <label for="pregnancies">Pregnancies</label>
+                <div class="field-container">
+                    <input type="range" id="pregnanciesRange" min="0" max="20" value="0" oninput="updateNumberInput('pregnanciesRange', 'pregnancies')">
+                    <input type="number" id="pregnancies" name="pregnancies" min="0" max="20" value="0" oninput="updateRangeInput('pregnancies', 'pregnanciesRange')">
+                </div>
+                <span class="description">Number of times pregnant (0-20)</span>
+            </div>
+            
+            <!-- Glucose -->
+            <div class="form-group">
+                <label for="glucose">Blood Glucose Level (mg/dL)</label>
+                <div class="field-container">
+                    <input type="range" id="glucoseRange" min="50" max="300" value="120" oninput="updateNumberInput('glucoseRange', 'glucose')">
+                    <input type="number" id="glucose" name="glucose" min="50" max="300" value="120" oninput="updateRangeInput('glucose', 'glucoseRange')">
+                </div>
+                <span class="description">Normal range: 70-140 mg/dL</span>
+            </div>
+            
+            <!-- Blood Pressure -->
+            <div class="form-group">
+                <label for="bloodpressure">Blood Pressure (mmHg)</label>
+                <div class="field-container">
+                    <input type="range" id="bloodpressureRange" min="30" max="150" value="80" oninput="updateNumberInput('bloodpressureRange', 'bloodpressure')">
+                    <input type="number" id="bloodpressure" name="bloodpressure" min="30" max="150" value="80" oninput="updateRangeInput('bloodpressure', 'bloodpressureRange')">
+                </div>
+                <span class="description">Diastolic blood pressure (normal range: 60-90 mmHg)</span>
+            </div>
+            
+            <!-- Skin Thickness -->
+            <div class="form-group">
+                <label for="skinthickness">Skin Thickness (mm)</label>
+                <div class="field-container">
+                    <input type="range" id="skinthicknessRange" min="5" max="100" value="25" oninput="updateNumberInput('skinthicknessRange', 'skinthickness')">
+                    <input type="number" id="skinthickness" name="skinthickness" min="5" max="100" value="25" oninput="updateRangeInput('skinthickness', 'skinthicknessRange')">
+                </div>
+                <span class="description">Triceps skinfold thickness</span>
+            </div>
+            
+            <!-- Insulin -->
+            <div class="form-group">
+                <label for="insulin">Insulin Level (μU/mL)</label>
+                <div class="field-container">
+                    <input type="range" id="insulinRange" min="0" max="300" value="80" oninput="updateNumberInput('insulinRange', 'insulin')">
+                    <input type="number" id="insulin" name="insulin" min="0" max="300" value="80" oninput="updateRangeInput('insulin', 'insulinRange')">
+                </div>
+                <span class="description">Normal fasting range: 5-25 μU/mL</span>
+            </div>
+            
+            <!-- BMI -->
+            <div class="form-group">
+                <label for="bmi">BMI (kg/m²)</label>
+                <div class="field-container">
+                    <input type="range" id="bmiRange" min="10" max="60" step="0.1" value="25" oninput="updateNumberInput('bmiRange', 'bmi')">
+                    <input type="number" id="bmi" name="bmi" min="10" max="60" step="0.1" value="25" oninput="updateRangeInput('bmi', 'bmiRange')">
+                </div>
+                <span class="description">Normal range: 18.5-24.9 kg/m²</span>
+            </div>
+            
+            <!-- Diabetes Pedigree -->
+            <div class="form-group">
+                <label for="pedigree">Diabetes Pedigree Function</label>
+                <div class="field-container">
+                    <input type="range" id="pedigreeRange" min="0.1" max="2.5" step="0.01" value="0.5" oninput="updateNumberInput('pedigreeRange', 'pedigree')">
+                    <input type="number" id="pedigree" name="pedigree" min="0.1" max="2.5" step="0.01" value="0.5" oninput="updateRangeInput('pedigree', 'pedigreeRange')">
+                </div>
+                <span class="description">Genetic influence score based on family history</span>
+            </div>
+            
+            <!-- Age -->
+            <div class="form-group">
+                <label for="age">Age (years)</label>
+                <div class="field-container">
+                    <input type="range" id="ageRange" min="20" max="100" value="35" oninput="updateNumberInput('ageRange', 'age')">
+                    <input type="number" id="age" name="age" min="20" max="100" value="35" oninput="updateRangeInput('age', 'ageRange')">
+                </div>
+            </div>
+            
+            <button type="submit" class="submit-btn">Check Diabetes Risk</button>
+        </form>
+        
+        <div id="prediction-result" class="mt-4">
+            {% if error %}
+            <div class="alert alert-danger">
+                <h4>Error: {{ error }}</h4>
+            </div>
+            {% endif %}
+            
+            {% if result %}
+            <div class="alert {% if result == 'Diabetic' %}alert-danger{% else %}alert-success{% endif %} text-center p-4">
+                <h2 class="display-5 mb-4">Prediction Result</h2>
+                <div class="prediction-box p-3 mb-3 border rounded">
+                    <h3 class="{% if result == 'Diabetic' %}text-danger{% else %}text-success{% endif %}">{{ result }}</h3>
+                </div>
+                {% if confidence %}
+                <div class="mt-3">
+                    <h4>Confidence: {{ confidence }}</h4>
+                </div>
+                {% endif %}
+                {% if risk_level %}
+                <div class="mt-3">
+                    <h4>Risk Level: {{ risk_level }}</h4>
+                </div>
+                {% endif %}
+                <hr class="my-4">
+                <p class="text-muted"><small>Note: This is not a medical diagnosis. Please consult with a healthcare professional for proper medical advice.</small></p>
+            </div>
+            {% endif %}
+        </div>
+        
+        <div class="footer">
+            <p>Disclaimer: This tool provides an estimation only and should not replace professional medical advice.</p>
+            <p>Always consult with healthcare professionals for proper diagnosis and treatment.</p>
+        </div>
+    </div>
+
+    <script>
+        // Function to update number input when range slider changes
+        function updateNumberInput(rangeId, numberId) {
+            const rangeValue = document.getElementById(rangeId).value;
+            document.getElementById(numberId).value = rangeValue;
+        }
+        
+        // Function to update range slider when number input changes
+        function updateRangeInput(numberId, rangeId) {
+            const numberValue = document.getElementById(numberId).value;
+            document.getElementById(rangeId).value = numberValue;
+        }
+    </script>
+</body>
+</html>
